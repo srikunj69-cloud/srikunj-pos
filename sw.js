@@ -1,5 +1,5 @@
 const cacheName = 'sk-pos-v1';
-const assets = ['./', './index.html', './manifest.json', './logo.png'];
+const assets = ['./', './index.html', './manifest.json', './logo.png', 'https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(cacheName).then(cache => cache.addAll(assets)));
