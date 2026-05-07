@@ -1,5 +1,5 @@
 const cacheName = 'sk-pos-v1';
-const assets = ['./', './index.html', './manifest.json'];
+const assets = ['./', './index.html', './manifest.json', './logo.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(cacheName).then(cache => cache.addAll(assets)));
