@@ -7,13 +7,14 @@
     <title>SRI KUNJ POS | NEXUS</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="logo.png">
+    
     <style>
         :root {
             --bg: #050505;
             --panel: rgba(25, 25, 25, 0.7);
             --glass-border: rgba(255, 255, 255, 0.1);
-            --primary: #bc13fe; /* Neon Purple */
-            --secondary: #00f2ff; /* Cyber Cyan */
+            --primary: #bc13fe;
+            --secondary: #00f2ff;
             --error: #ff2e63;
             --text: #e0e0e0;
             --accent-glow: rgba(188, 19, 254, 0.3);
@@ -32,7 +33,7 @@
             background: var(--bg);
             background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #050505 80%);
             color: var(--text);
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             height: 100%; width: 100vw;
             overflow: hidden; position: fixed;
         }
@@ -44,63 +45,62 @@
 
         @media (max-aspect-ratio: 1/1), (max-width: 600px) {
             .app-wrapper { flex-direction: column; }
-            .bill-side { height: 40vh; flex: none; border-right: none; border-bottom: 1px solid var(--glass-border); }
-            .calc-side { height: 60vh; flex: none; }
+            .bill-side { height: 42vh; flex: none; border-right: none; border-bottom: 1px solid var(--glass-border); }
+            .calc-side { height: 58vh; flex: none; }
         }
 
         .tab-bar { display: flex; background: rgba(0,0,0,0.5); padding: 5px; gap: 5px; flex-shrink: 0; }
         .tab { flex: 1; padding: 12px; text-align: center; border-radius: 8px; color: #666; font-weight: 800; font-size: 0.75rem; letter-spacing: 1px; transition: all 0.3s ease; cursor: pointer; }
-        .tab.active { color: var(--secondary); background: rgba(0, 242, 255, 0.1); box-shadow: inset 0 0 10px rgba(0, 242, 255, 0.1); border: 1px solid rgba(0, 242, 255, 0.3); }
+        .tab.active { color: var(--secondary); background: rgba(0, 242, 255, 0.1); border: 1px solid rgba(0, 242, 255, 0.3); }
 
-        .header { padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); flex-shrink: 0; }
+        .header { padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); flex-shrink: 0; }
         .view { display: none; flex: 1; flex-direction: column; overflow: hidden; height: 100%; }
         .view.active { display: flex; }
-        .item-list, .history-list { flex: 1; overflow-y: auto; padding: 10px; background: transparent; }
+        .item-list, .history-list { flex: 1; overflow-y: auto; padding: 10px; background: transparent; -webkit-overflow-scrolling: touch; }
 
-        .item-card, .history-card { background: var(--panel); backdrop-filter: blur(10px); margin-bottom: 8px; padding: 15px; border-radius: 12px; border: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        .item-card.editing { border-color: var(--primary); background: rgba(188, 19, 254, 0.1); box-shadow: 0 0 15px var(--accent-glow); }
+        .item-card, .history-card { background: var(--panel); backdrop-filter: blur(10px); margin-bottom: 8px; padding: 12px; border-radius: 12px; border: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; }
+        .item-card.editing { border-color: var(--primary); background: rgba(188, 19, 254, 0.1); }
 
-        .bill-footer { background: rgba(0,0,0,0.6); padding: 15px; border-top: 1px solid var(--glass-border); flex-shrink: 0; }
-        .total-display { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
-        .total-display span:first-child { font-size: 0.8rem; font-weight: 800; color: #888; letter-spacing: 2px; }
-        .total-display span:last-child { font-size: 2rem; font-weight: 900; color: var(--secondary); text-shadow: 0 0 15px rgba(0, 242, 255, 0.4); }
-        .print-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .bill-footer { background: rgba(0,0,0,0.6); padding: 12px; border-top: 1px solid var(--glass-border); flex-shrink: 0; }
+        .total-display { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+        .total-display span:last-child { font-size: 1.8rem; font-weight: 900; color: var(--secondary); text-shadow: 0 0 10px rgba(0, 242, 255, 0.3); }
+        .print-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-        .display-area { height: 25%; padding: 0 25px; display: flex; flex-direction: column; justify-content: center; text-align: right; flex-shrink: 0; }
-        .formula { color: var(--primary); font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 5px; opacity: 0.8; }
-        .current-val { font-size: 3.5rem; font-weight: 200; line-height: 1; color: #fff; }
+        .display-area { height: 22%; padding: 0 25px; display: flex; flex-direction: column; justify-content: center; text-align: right; flex-shrink: 0; }
+        .formula { color: var(--primary); font-size: 0.8rem; font-weight: 700; margin-bottom: 5px; }
+        .current-val { font-size: 3rem; font-weight: 200; line-height: 1; color: #fff; }
         .active-txt { border-bottom: 2px solid var(--primary); color: #fff; padding-bottom: 2px; }
 
-        .keypad { flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 10px; background: transparent; touch-action: none; padding-bottom: env(safe-area-inset-bottom, 20px); }
-        .keypad button { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: #fff; font-size: 1.6rem; font-weight: 300; border-radius: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.1s ease; backdrop-filter: blur(5px); }
-        .keypad button.pressed { background: var(--primary) !important; color: white !important; transform: scale(0.92); box-shadow: 0 0 20px var(--primary); border-color: white; }
+        .keypad { flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 10px; background: transparent; touch-action: none; padding-bottom: env(safe-area-inset-bottom, 20px); }
+        .keypad button { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: #fff; font-size: 1.6rem; font-weight: 300; border-radius: 12px; display: flex; align-items: center; justify-content: center; transition: background 0.1s; }
+        .keypad button.pressed { background: var(--primary) !important; color: white !important; transform: scale(0.95); }
 
-        .op-btn { color: var(--secondary) !important; font-weight: bold !important; background: rgba(0, 242, 255, 0.05) !important; }
+        .op-btn { color: var(--secondary) !important; background: rgba(0, 242, 255, 0.05) !important; }
         .del-btn { color: var(--error) !important; background: rgba(255, 46, 99, 0.05) !important; }
-        .enter-btn { background: linear-gradient(135deg, var(--secondary), #00a2ff) !important; color: black !important; grid-column: span 2; font-weight: 800 !important; font-size: 1.1rem !important; text-transform: uppercase; letter-spacing: 1px; border: none !important; }
+        .enter-btn { background: linear-gradient(135deg, var(--secondary), #00a2ff) !important; color: black !important; grid-column: span 2; font-weight: 800 !important; font-size: 1rem !important; border: none !important; }
 
-        .btn-sm { padding: 10px 14px; border: 1px solid var(--glass-border); border-radius: 8px; font-size: 0.7rem; font-weight: 800; cursor: pointer; }
+        .btn-sm { padding: 8px 12px; border: 1px solid var(--glass-border); border-radius: 8px; font-size: 0.7rem; font-weight: 800; cursor: pointer; }
         .btn-edit { background: rgba(188, 19, 254, 0.1); color: var(--primary); }
         .btn-del { background: rgba(255, 46, 99, 0.1); color: var(--error); }
-        .main-btn { padding: 16px; border-radius: 12px; font-weight: 800; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--glass-border); cursor: pointer; }
+        .main-btn { padding: 14px; border-radius: 12px; font-weight: 800; font-size: 0.8rem; border: 1px solid var(--glass-border); cursor: pointer; }
 
+        /* PRINT STYLES */
         #receipt-print { display: none; }
         @media print {
             .app-wrapper { display: none !important; }
-            #receipt-print { display: block !important; width: 58mm; color: #000; background: #fff; padding: 0; margin: 0; font-family: Arial, sans-serif; font-size: 11px; }
+            #receipt-print { display: block !important; width: 58mm; color: #000; background: #fff; padding: 0; font-family: Arial, sans-serif; font-size: 10px; }
             .r-header { text-align: center; border-bottom: 1px dashed #000; padding-bottom: 5px; }
-            .r-header h3 { margin: 0; font-size: 16px; }
+            .r-header h3 { margin: 0; font-size: 14px; }
             .qr-container { text-align: center; margin-top: 10px; }
             table { width: 100%; border-collapse: collapse; margin-top: 5px; }
-            th { border-bottom: 1px solid #000; padding: 4px 0; font-size: 10px; }
-            td { padding: 5px 0; vertical-align: top; }
+            th { border-bottom: 1px solid #000; padding: 3px 0; }
+            td { padding: 3px 0; }
             .t-total { border-top: 1px solid #000; font-weight: bold; }
-            .grand-amt { font-size: 15px; font-weight: bold; }
             .text-right { text-align: right; }
             .text-center { text-align: center; }
         }
     </style>
-    <!-- Local QR Generator Library -->
+    <!-- Library for Offline QR Generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 </head>
 <body>
@@ -114,24 +114,24 @@
 
             <div id="pos-view" class="view active">
                 <div class="header">
-                    <span id="bill-indicator" style="font-weight:900; color:var(--primary); font-size:0.75rem; letter-spacing:1px">NEW TERMINAL</span>
-                    <span id="count" style="font-size:0.75rem; color:#888">0 ITEMS</span>
+                    <span id="bill-indicator" style="font-weight:900; color:var(--primary); font-size:0.7rem;">NEW TERMINAL</span>
+                    <span id="count" style="font-size:0.7rem; color:#888">0 ITEMS</span>
                 </div>
                 <div id="item-list" class="item-list"></div>
                 <div class="bill-footer">
                     <div class="total-display">
-                        <span>NET TOTAL</span>
+                        <span style="font-size:0.7rem; letter-spacing:1px">NET TOTAL</span>
                         <span id="grand-total">0.00</span>
                     </div>
                     <div class="print-actions">
-                        <button class="main-btn" style="background:rgba(255,255,255,0.05); color:#fff" onclick="resetApp()">CLEAR</button>
-                        <button class="main-btn" style="background:var(--secondary); color:#000; border:none; box-shadow: 0 5px 15px rgba(0, 242, 255, 0.3);" onclick="saveAndPrint()">FINISH</button>
+                        <button class="main-btn" style="background:rgba(255,255,255,0.05); color:#fff" id="reset-btn">CLEAR</button>
+                        <button class="main-btn" style="background:var(--secondary); color:#000; border:none;" id="finish-btn">FINISH</button>
                     </div>
                 </div>
             </div>
 
             <div id="history-view" class="view">
-                <div class="header"><b style="letter-spacing:1px; font-size:0.75rem">ARCHIVED TRANSACTIONS</b></div>
+                <div class="header"><b style="font-size:0.7rem">ARCHIVED TRANSACTIONS</b></div>
                 <div id="history-list" class="history-list"></div>
             </div>
         </div>
@@ -163,42 +163,30 @@
     <div id="receipt-print">
         <div class="r-header">
             <h3>SRI KUNJ</h3>
-            <div style="font-size:10px; line-height: 1.4;">
-                LN Road, Islampur<br>
-                PH: 9153306606, 7992265787
-            </div>
+            <div style="font-size:9px;">LN Road, Islampur | PH: 9153306606, 7992265787</div>
         </div>
-        <div style="padding: 5px 0; font-size:10px; display: flex; justify-content: space-between;">
+        <div style="padding: 5px 0; display: flex; justify-content: space-between;">
             <span id="r-date"></span>
             <span>Cash Memo</span>
         </div>
         <table>
             <thead>
-                <tr>
-                    <th width="10%" align="left">S.N</th>
-                    <th width="30%" align="left">Rate</th>
-                    <th width="25%" class="text-center">Qty</th>
-                    <th width="35%" class="text-right">Total</th>
-                </tr>
+                <tr><th align="left">S.N</th><th align="left">Rate</th><th class="text-center">Qty</th><th class="text-right">Total</th></tr>
             </thead>
             <tbody id="r-body"></tbody>
             <tfoot>
                 <tr class="t-total">
-                    <td colspan="2" style="padding-top: 8px;">Total</td>
-                    <td id="r-total-qty" class="text-center" style="padding-top: 8px;">0</td>
-                    <td id="r-total-amt" class="text-right grand-amt" style="padding-top: 8px;">0</td>
+                    <td colspan="2" style="padding-top: 5px;">Total</td>
+                    <td id="r-total-qty" class="text-center">0</td>
+                    <td id="r-total-amt" class="text-right">0</td>
                 </tr>
             </tfoot>
         </table>
         <div class="qr-container">
             <canvas id="r-qr"></canvas>
-            <p style="font-size:9px; margin: 3px 0;">Scan to Pay</p>
+            <p style="font-size:8px;">Scan to Pay</p>
         </div>
-        <center>
-            <p style="font-size:10px; font-weight: bold; margin-top: 10px; border-top: 1px dashed #000; padding-top: 5px;">
-                NO EXCHANGE NO REFUND
-            </p>
-        </center>
+        <center><p style="font-size:9px; font-weight: bold; margin-top: 10px; border-top: 1px dashed #000;">NO EXCHANGE NO REFUND</p></center>
     </div>
 
 <script>
@@ -215,30 +203,39 @@
 
     const fmt = (val) => new Intl.NumberFormat('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(val);
 
-    const keypad = document.getElementById('keypad-grid');
-    
+    // Initializer
+    window.onload = () => {
+        initEvents();
+        renderPOS();
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+    };
+
     function initEvents() {
+        // Tab switching
         document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                switchTab(tab.dataset.tab);
-            });
+            tab.addEventListener('click', () => switchTab(tab.dataset.tab));
         });
 
+        // Keypad Input
+        const keypad = document.getElementById('keypad-grid');
         keypad.addEventListener('touchstart', (e) => {
             if (e.target.tagName === 'BUTTON') {
                 e.preventDefault();
-                const val = e.target.dataset.val;
                 e.target.classList.add('pressed');
-                handleInput(val);
+                handleInput(e.target.dataset.val);
             }
+        });
+        keypad.addEventListener('touchend', (e) => {
+            if (e.target.tagName === 'BUTTON') e.target.classList.remove('pressed');
+        });
+        // Click fallback for PC/broken touch
+        keypad.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') handleInput(e.target.dataset.val);
         });
 
-        keypad.addEventListener('touchend', (e) => {
-            if (e.target.tagName === 'BUTTON') {
-                setTimeout(() => e.target.classList.remove('pressed'), 50);
-            }
-        });
+        // Main action buttons
+        document.getElementById('reset-btn').addEventListener('click', resetApp);
+        document.getElementById('finish-btn').addEventListener('click', saveAndPrint);
     }
 
     function handleInput(k) {
@@ -259,7 +256,7 @@
             };
             if (editingItemId) {
                 const idx = items.findIndex(x => x.id === editingItemId);
-                items[idx] = item;
+                if (idx > -1) items[idx] = item;
             } else {
                 items.push(item);
             }
@@ -279,14 +276,9 @@
     function switchTab(tab) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        if(tab === 'pos') {
-            document.querySelector('.tab[data-tab="pos"]').classList.add('active');
-            document.getElementById('pos-view').classList.add('active');
-        } else {
-            document.querySelector('.tab[data-tab="history"]').classList.add('active');
-            document.getElementById('history-view').classList.add('active');
-            renderHistory();
-        }
+        document.querySelector(`.tab[data-tab="${tab}"]`).classList.add('active');
+        document.getElementById(`${tab}-view`).classList.add('active');
+        if (tab === 'history') renderHistory();
     }
 
     function renderPOS() {
@@ -295,18 +287,19 @@
         let total = 0;
         items.forEach(item => {
             total += item.amt;
-            listEl.innerHTML += `
-                <div class="item-card ${editingItemId === item.id ? 'editing' : ''}">
-                    <div style="flex:1" onclick="editItem(${item.id})">
-                        <div style="font-size:0.7rem; color:#888; letter-spacing:1px">RATE: ${fmt(item.rate)} × ${item.qty}</div>
-                        <div style="color:var(--secondary); font-weight:900; font-size:1.1rem">₹${fmt(item.amt)}</div>
-                    </div>
-                    <button class="btn-sm btn-del" onclick="deleteItem(${item.id})">DEL</button>
-                </div>`;
+            const card = document.createElement('div');
+            card.className = `item-card ${editingItemId === item.id ? 'editing' : ''}`;
+            card.innerHTML = `
+                <div style="flex:1" onclick="editItem(${item.id})">
+                    <div style="font-size:0.7rem; color:#888;">${fmt(item.rate)} × ${item.qty}</div>
+                    <div style="color:var(--secondary); font-weight:900;">₹${fmt(item.amt)}</div>
+                </div>
+                <button class="btn-sm btn-del" onclick="deleteItem(${item.id})">DEL</button>`;
+            listEl.appendChild(card);
         });
         document.getElementById('grand-total').innerText = fmt(total);
         document.getElementById('count').innerText = items.length + " ITEMS";
-        document.getElementById('bill-indicator').innerText = activeBillId ? "OVERRIDING" : "NEW TERMINAL";
+        document.getElementById('bill-indicator').innerText = activeBillId ? "EDITING BILL" : "NEW TERMINAL";
         updateCalcDisplay();
         listEl.scrollTop = listEl.scrollHeight;
     }
@@ -332,7 +325,7 @@
 
         if (activeBillId) {
             const idx = billHistory.findIndex(b => b.id === activeBillId);
-            billHistory[idx] = billData;
+            if (idx > -1) billHistory[idx] = billData;
         } else {
             billHistory.unshift(billData);
         }
@@ -341,79 +334,70 @@
         document.getElementById('r-date').innerText = "Date: " + billData.timestamp;
         document.getElementById('r-total-amt').innerText = fmt(billTotal);
         document.getElementById('r-total-qty').innerText = billQty;
+        
         let bodyHtml = "";
         items.forEach((i, index) => { 
             bodyHtml += `<tr><td>${index + 1}</td><td>${fmt(i.rate)}</td><td class="text-center">${i.qty}</td><td class="text-right">${fmt(i.amt)}</td></tr>`; 
         });
         document.getElementById('r-body').innerHTML = bodyHtml;
 
+        // Offline QR
         const upiUrl = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(MERCHANT_NAME)}&am=${billTotal.toFixed(2)}&cu=INR`;
-        const qrContainer = document.getElementById('r-qr');
-        
-        new QRious({
-            element: qrContainer,
-            value: upiUrl,
-            size: 200,
-            level: 'H'
-        });
+        if (typeof QRious !== 'undefined') {
+            new QRious({ element: document.getElementById('r-qr'), value: upiUrl, size: 180, level: 'H' });
+        }
 
-        setTimeout(() => {
-            window.print();
-            resetApp();
-        }, 200);
+        setTimeout(() => { window.print(); resetApp(); }, 250);
     }
 
     function renderHistory() {
         const histEl = document.getElementById('history-list');
-        histEl.innerHTML = billHistory.length === 0 ? '<p style="text-align:center;opacity:0.3;margin-top:40px;font-size:0.8rem">NO HISTORY FOUND</p>' : '';
+        histEl.innerHTML = billHistory.length === 0 ? '<p style="text-align:center;opacity:0.3;margin-top:40px;">NO HISTORY</p>' : '';
         billHistory.forEach(bill => {
-            histEl.innerHTML += `
-                <div class="history-card">
-                    <div><b style="color:var(--secondary)">₹${fmt(bill.total)}</b><br><small style="color:#666">${bill.timestamp}</small></div>
-                    <div>
-                        <button class="btn-sm btn-edit" onclick="loadBillForEdit(${bill.id})">EDIT</button>
-                        <button class="btn-sm btn-del" onclick="deleteHistory(${bill.id})">DEL</button>
-                    </div>
+            const card = document.createElement('div');
+            card.className = "history-card";
+            card.innerHTML = `
+                <div><b style="color:var(--secondary)">₹${fmt(bill.total)}</b><br><small style="color:#666">${bill.timestamp}</small></div>
+                <div>
+                    <button class="btn-sm btn-edit" onclick="loadBillForEdit(${bill.id})">EDIT</button>
+                    <button class="btn-sm btn-del" onclick="deleteHistory(${bill.id})">DEL</button>
                 </div>`;
+            histEl.appendChild(card);
         });
     }
 
-    function loadBillForEdit(id) {
+    window.loadBillForEdit = (id) => {
         const bill = billHistory.find(b => b.id === id);
-        items = [...bill.items]; activeBillId = bill.id;
-        switchTab('pos'); renderPOS();
-    }
+        if (bill) {
+            items = [...bill.items]; activeBillId = bill.id;
+            switchTab('pos'); renderPOS();
+        }
+    };
 
-    function deleteHistory(id) {
-        if(confirm("DELETE RECORD?")) {
+    window.deleteHistory = (id) => {
+        if(confirm("DELETE?")) {
             billHistory = billHistory.filter(b => b.id !== id);
             localStorage.setItem('pos_history', JSON.stringify(billHistory));
             renderHistory();
         }
-    }
+    };
 
-    function editItem(id) {
+    window.editItem = (id) => {
         const item = items.find(i => i.id === id);
-        rate = item.rate.toString(); qty = item.qty.toString();
-        editingItemId = id; isQtyMode = false;
-        renderPOS();
-    }
+        if (item) {
+            rate = item.rate.toString(); qty = item.qty.toString();
+            editingItemId = id; isQtyMode = false; renderPOS();
+        }
+    };
 
-    function deleteItem(id) {
+    window.deleteItem = (id) => {
         items = items.filter(i => i.id !== id);
         renderPOS();
-    }
+    };
 
     function resetApp() {
         items = []; rate = ""; qty = ""; isQtyMode = false; editingItemId = null; activeBillId = null;
         renderPOS();
-    }
-
-    initEvents();
-    renderPOS();
-
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js');
     }
 </script>
 </body>
