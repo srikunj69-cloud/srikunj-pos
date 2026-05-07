@@ -149,6 +149,8 @@
             .text-center { text-align: center; }
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js">
+    </script>
 </head>
 <body>
 
@@ -238,7 +240,7 @@
             </tfoot>
         </table>
         <div class="qr-container">
-            <img id="r-qr" src="" alt="UPI QR">
+            <canvas id="r-qr" src="" alt="UPI QR"></canvas>
             <p style="font-size:9px; margin: 3px 0;">Scan to Pay</p>
         </div>
         <center>
@@ -368,38 +370,54 @@
     }
 
     function saveAndPrint() {
-        if (items.length === 0) return;
-        const billTotal = items.reduce((sum, i) => sum + i.amt, 0);
-        const billQty = items.reduce((sum, i) => sum + i.qty, 0);
-        const billData = {
-            id: activeBillId || Date.now(),
-            timestamp: new Date().toLocaleString('en-IN', {dateStyle:'short', timeStyle:'short'}),
-            items: [...items], total: billTotal, totalQty: billQty
-        };
+    function saveAndPrint() {
+    if (items.length === 0) return;
+    const billTotal = items.reduce((sum, i) => sum + i.amt, 0);
+    const billQty = items.reduce((sum, i) => sum + i.qty, 0);
+    const billData = {
+        id: activeBillId || Date.now(),
+        timestamp: new Date().toLocaleString('en-IN', {dateStyle:'short', timeStyle:'short'}),
+        items: [...items], total: billTotal, totalQty: billQty
+    };
 
-        if (activeBillId) {
-            const idx = billHistory.findIndex(b => b.id === activeBillId);
-            billHistory[idx] = billData;
-        } else {
-            billHistory.unshift(billData);
-        }
-        localStorage.setItem('pos_history', JSON.stringify(billHistory));
-
-        document.getElementById('r-date').innerText = "Date: " + billData.timestamp;
-        document.getElementById('r-total-amt').innerText = fmt(billTotal);
-        document.getElementById('r-total-qty').innerText = billQty;
-        let bodyHtml = "";
-        items.forEach((i, index) => { 
-            bodyHtml += `<tr><td>${index + 1}</td><td>${fmt(i.rate)}</td><td class="text-center">${i.qty}</td><td class="text-right">${fmt(i.amt)}</td></tr>`; 
-        });
-        document.getElementById('r-body').innerHTML = bodyHtml;
-
-        const upiUrl = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(MERCHANT_NAME)}&am=${billTotal.toFixed(2)}&cu=INR`;
-        const qrImg = document.getElementById('r-qr');
-        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(upiUrl)}`;
-
-        qrImg.onload = () => { window.print(); resetApp(); };
+    if (activeBillId) {
+        const idx = billHistory.findIndex(b => b.id === activeBillId);
+        billHistory[idx] = billData;
+    } else {
+        billHistory.unshift(billData);
     }
+    localStorage.setItem('pos_history', JSON.stringify(billHistory));
+
+    // Update Receipt Data
+    document.getElementById('r-date').innerText = "Date: " + billData.timestamp;
+    document.getElementById('r-total-amt').innerText = fmt(billTotal);
+    document.getElementById('r-total-qty').innerText = billQty;
+    let bodyHtml = "";
+    items.forEach((i, index) => { 
+        bodyHtml += `<tr><td>${index + 1}</td><td>${fmt(i.rate)}</td><td class="text-center">${i.qty}</td><td class="text-right">${fmt(i.amt)}</td></tr>`; 
+    });
+    document.getElementById('r-body').innerHTML = bodyHtml;
+
+    // --- NEW OFFLINE QR GENERATION ---
+    const upiUrl = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(MERCHANT_NAME)}&am=${billTotal.toFixed(2)}&cu=INR`;
+    
+    // Clear the old QR if any, and generate new one locally
+    const qrContainer = document.getElementById('r-qr');
+    
+    // We use a Canvas for local generation
+    new QRious({
+        element: qrContainer,
+        value: upiUrl,
+        size: 200,
+        level: 'H'
+    });
+
+    // Short delay to ensure rendering is done, then print
+    setTimeout(() => {
+        window.print();
+        resetApp();
+    }, 200);
+}
 
     function renderHistory() {
         const histEl = document.getElementById('history-list');
