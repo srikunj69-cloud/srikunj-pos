@@ -95,17 +95,37 @@ input:checked + .slider:before { transform: translateX(14px); }
         /* PRINT STYLES */
         #receipt-print { display: none; }
         @media print {
-            .app-wrapper { display: none !important; }
-            #receipt-print { display: block !important; width: 58mm; color: #000; background: #fff; padding: 0; font-family: Arial, sans-serif; font-size: 10px; }
-            .r-header { text-align: center; border-bottom: 1px dashed #000; padding-bottom: 5px; }
-            .r-header h3 { margin: 0; font-size: 14px; }
-            .qr-container { text-align: center; margin-top: 10px; }
-            table { width: 100%; border-collapse: collapse; margin-top: 5px; }
-            th { border-bottom: 1px solid #000; padding: 3px 0; }
-            td { padding: 3px 0; }
-            .t-total { border-top: 1px solid #000; font-weight: bold; }
-            .text-right { text-align: right; }
-            .text-center { text-align: center; }
+    .app-wrapper { display: none !important; }
+    #receipt-print { 
+        display: block !important; 
+        width: 58mm; 
+        color: #000; 
+        background: #fff; 
+        padding: 0; 
+        margin: 0; 
+        font-family: Arial, sans-serif; 
+        font-size: 13px; /* Increased from 10px */
+        line-height: 1.2;
+    }
+    .r-header { text-align: center; border-bottom: 1px dashed #000; padding-bottom: 5px; }
+    .r-header h3 { margin: 0; font-size: 18px; } /* Increased from 14px */
+    .r-header div { font-size: 11px !important; } /* Shop address size */
+    
+    .qr-container { text-align: center; margin-top: 5px; }
+    /* Force the QR Canvas to be small on paper */
+    #r-qr { width: 100px !important; height: 100px !important; } 
+
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    th { border-bottom: 1px solid #000; padding: 5px 0; font-size: 12px; }
+    td { padding: 6px 0; vertical-align: top; font-size: 13px; } /* Increased row text */
+    
+    .t-total { border-top: 1px solid #000; font-weight: bold; }
+    .t-total td { font-size: 15px; padding-top: 8px; } /* Total amount size */
+    
+    .text-right { text-align: right; }
+    .text-center { text-align: center; }
+    
+    footer-msg { font-size: 11px; font-weight: bold; display: block; text-align: center; margin-top: 10px; border-top: 1px dashed #000; padding-top: 5px; }
         }
     </style>
     <!-- Library for Offline QR Generation -->
@@ -201,7 +221,7 @@ input:checked + .slider:before { transform: translateX(14px); }
             <canvas id="r-qr"></canvas>
             <p style="font-size:8px;">Scan to Pay</p>
         </div>
-        <center><p style="font-size:9px; font-weight: bold; margin-top: 10px; border-top: 1px dashed #000;">NO EXCHANGE NO REFUND</p></center>
+        <center><p style="font-size:10px; font-weight: bold; margin-top: 10px; border-top: 2px dashed #000;">NO EXCHANGE NO REFUND</p></center>
     </div>
 
 <script>
@@ -364,7 +384,7 @@ if (includeQR) {
     qrSection.style.display = "block"; // Show in print
     const upiUrl = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(MERCHANT_NAME)}&am=${billTotal.toFixed(2)}&cu=INR`;
     if (typeof QRious !== 'undefined') {
-        new QRious({ element: document.getElementById('r-qr'), value: upiUrl, size: 180, level: 'H' });
+        new QRious({ element: document.getElementById('r-qr'), value: upiUrl, size: 90, level: 'M' });
     }
 } else {
     qrSection.style.display = "none"; // Hide in print
