@@ -384,7 +384,7 @@ if (includeQR) {
     qrSection.style.display = "block"; // Show in print
     const upiUrl = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(MERCHANT_NAME)}&am=${billTotal.toFixed(2)}&cu=INR`;
     if (typeof QRious !== 'undefined') {
-        new QRious({ element: document.getElementById('r-qr'), value: upiUrl, size: 90, level: 'M' });
+        new QRious({ element: document.getElementById('r-qr'), value: upiUrl, size: 120, level: 'M' });
     }
 } else {
     qrSection.style.display = "none"; // Hide in print
