@@ -84,6 +84,14 @@
         .btn-del { background: rgba(255, 46, 99, 0.1); color: var(--error); }
         .main-btn { padding: 14px; border-radius: 12px; font-weight: 800; font-size: 0.8rem; border: 1px solid var(--glass-border); cursor: pointer; }
 
+        /* Futuristic Toggle Switch */
+.switch { position: relative; display: inline-block; width: 34px; height: 20px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 20px; border: 1px solid var(--glass-border); }
+.slider:before { position: absolute; content: ""; height: 12px; width: 12px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+input:checked + .slider { background-color: var(--secondary); box-shadow: 0 0 10px rgba(0, 242, 255, 0.3); }
+input:checked + .slider:before { transform: translateX(14px); }
+        
         /* PRINT STYLES */
         #receipt-print { display: none; }
         @media print {
@@ -122,6 +130,13 @@
                     <div class="total-display">
                         <span style="font-size:0.7rem; letter-spacing:1px">NET TOTAL</span>
                         <span id="grand-total">0.00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 5px;">
+    <span style="font-size: 0.7rem; color: #888; letter-spacing: 1px;">PRINT UPI QR</span>
+    <label class="switch">
+        <input type="checkbox" id="qr-toggle" checked>
+        <span class="slider"></span>
+    </label>
                     </div>
                     <div class="print-actions">
                         <button class="main-btn" style="background:rgba(255,255,255,0.05); color:#fff" id="reset-btn">CLEAR</button>
@@ -341,11 +356,19 @@
         });
         document.getElementById('r-body').innerHTML = bodyHtml;
 
-        // Offline QR
-        const upiUrl = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(MERCHANT_NAME)}&am=${billTotal.toFixed(2)}&cu=INR`;
-        if (typeof QRious !== 'undefined') {
-            new QRious({ element: document.getElementById('r-qr'), value: upiUrl, size: 180, level: 'H' });
-        }
+        // Check toggle status
+const includeQR = document.getElementById('qr-toggle').checked;
+const qrSection = document.querySelector('.qr-container');
+
+if (includeQR) {
+    qrSection.style.display = "block"; // Show in print
+    const upiUrl = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(MERCHANT_NAME)}&am=${billTotal.toFixed(2)}&cu=INR`;
+    if (typeof QRious !== 'undefined') {
+        new QRious({ element: document.getElementById('r-qr'), value: upiUrl, size: 180, level: 'H' });
+    }
+} else {
+    qrSection.style.display = "none"; // Hide in print
+}
 
         setTimeout(() => { window.print(); resetApp(); }, 250);
     }
